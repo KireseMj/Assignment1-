@@ -157,8 +157,20 @@ public class Package {
             case "Jamaica": ratePerKg= 15.00;
             break;
             case "Antigua": ratePerKg= 18.00;
+            break;
+            case "Grenada": ratePerKg = 10.00;
+            break;
+            default: ratePerKg = 0.0;
+            break;
         }
-        return 0.0; // TODO M6
+        double cost = getBillableWeightKg() * ratePerKg;
+        if (isFragile){
+            cost *= 1.25;
+        }
+        if(declaredValue >0){
+            cost += declaredValue * 0.015;
+        }
+        return Math.round(cost*100) / 100.0; // TODO M6
     }
 
     /**
@@ -169,6 +181,12 @@ public class Package {
      */
     @Override
     public String toString() {
-        return ""; // TODO M7
+        String base = String.format("PKG-%04d  %s -> %s  %s  %.2f kg  $%.2f",
+                    Integer.parseInt(trackingId.substring(4)), senderName,
+                    receiverName, destination, getBillableWeightKg(), getShippingCost());
+        if(isFragile){
+            base+= "  [FRAGILE]";
+        }
+        return base; // TODO M74
     }
 }
