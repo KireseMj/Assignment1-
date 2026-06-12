@@ -20,7 +20,7 @@ public class FreightTerminal {
         this.terminalName = terminalName;
         this.pendingPackages = new ArrayList<Package>();
         this.activeContainers = new ArrayList<Container>();
-        this.dispatchedContainers = new ArrayList<Container>()
+        this.dispatchedContainers = new ArrayList<Container>();
 
     }
 
@@ -74,7 +74,10 @@ public class FreightTerminal {
      *   Clear activeContainers. Return the count dispatched.
      */
     public int dispatchAll() {
-        return 0; // TODO M9
+        int count = activeContainers.size();
+        dispatchedContainers.addAll(activeContainers);
+        activeContainers.clear();
+        return count; // TODO M9
     }
 
     /**
@@ -82,7 +85,11 @@ public class FreightTerminal {
      *   dispatched containers.
      */
     public double getTotalRevenue() {
-        return 0.0; // TODO M9
+        double total=0.0;
+        for (Container c : dispatchedContainers){
+            total += c.getTotalRevenue();
+        }
+        return total; // TODO M9
     }
 
     /**
@@ -90,7 +97,11 @@ public class FreightTerminal {
      *   dispatched containers.
      */
     public int getTotalPackagesShipped() {
-        return 0; // TODO M9
+        int total=0;
+        for (Container c : dispatchedContainers){
+            total += c.getPackageCount();
+        }
+        return total; // TODO M9
     }
 
     /**
@@ -99,6 +110,25 @@ public class FreightTerminal {
      *   Return the Package or null if not found.
      */
     public Package findPackage(String trackingId) {
+        for (Package p : pendingPackages){
+            if (p.getTrackingId().equals(trackingId)){
+                return p;
+            }
+        }
+        for (Container c : activeContainers){
+            for (Package p: c.getPackages()){
+                if (p.getTrackingId().equals(trackingId)){
+                    return p;
+                }
+            }
+        }
+        for (Container c : dispatchedContainers){
+            for (Package p : c.getPackages()){
+                if(p.getTrackingId().equals(trackingId)){
+                    return p;
+                }
+            }
+        }
         return null; // TODO M9
     }
 
@@ -124,6 +154,17 @@ public class FreightTerminal {
      *     ...
      */
     public void printDailyReport() {
+        System.out.println("== Daily Report: " + terminalName + " ==");
+        System.out.printf("%-20s%d%n", "Packages Received: ", getTotalPackagesShipped());
+        System.out.printf("%-20s%d%n", "Containers Packed: ", dispatchedContainers.size());
+        System.out.printf("%-20s%d%n", "Packages Shipped: ", getTotalPackagesShipped());
+        System.out.printf("%-20s%f%n", "Total Revenue: ", getTotalRevenue());
+        System.out.println();
+        System.out.println("Revenue by destination:");
+        for (Container c : dispatchedContainers){
+            System.out.printf("  %-12s $%.2f  (%d packages)%n", c.getDestination() + ":",
+                    c.getTotalRevenue(), c.getPackageCount());
+        }
         // TODO M10
     }
 }

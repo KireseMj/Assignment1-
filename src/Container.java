@@ -31,7 +31,7 @@ public class Container {
         if (maxWeightKg <=0 ){
             throw new IllegalArgumentException("Weight must be above 0");
         }
-        this.containerId = Sring.format("CNT-%03d", nextContainerId);
+        this.containerId = String.format("CNT-%03d", nextContainerId);
         nextContainerId++;
         this.destination = destination;
         this.maxWeightKg = maxWeightKg;
@@ -82,7 +82,7 @@ public class Container {
      * TODO M8: Return the sum of all packages' weightKg.
      */
     public double getCurrentWeightKg() {
-        dounle total = 0.0;
+        double total = 0.0;
         for (Package p : packages){
             total+= p.getWeightKg();
         }
@@ -126,8 +126,18 @@ public class Container {
      * Use StringBuilder and String.format.
      */
     public String getManifest() {
-        String
-        return ""; // TODO M9
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("== %s->%s (%d packages, %.2f/%.2f kg) ==%n",
+                containerId, destination, packages.size(), getCurrentWeightKg(),
+                maxWeightKg));
+
+        for (Package p: packages){
+            sb.append(" ").append(p.toString()).append("\n");
+        }
+        sb.append(String.format("  Container revenue: %.2f", getTotalRevenue()));
+
+
+        return sb.toString(); // TODO M9
     }
 
     /**
@@ -143,6 +153,8 @@ public class Container {
      */
     @Override
     public String toString() {
-        return ""; // TODO M9
+        return String.format("%s -> %s [%d packages, %.2f/%.f kg]", containerId,
+                destination, packages.size(),getCurrentWeightKg(), getCurrentWeightKg(),
+                maxWeightKg); // TODO M9
     }
 }

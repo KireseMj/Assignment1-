@@ -85,7 +85,7 @@ public class Package {
     }
 
     // --- Getters ---
-    0.
+
     // TODO M4: Write getters for ALL fields:
     public String getTrackingId() {
         return trackingId; }
