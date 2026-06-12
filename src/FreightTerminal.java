@@ -17,21 +17,27 @@ public class FreightTerminal {
      * TODO M2: Initialise terminalName and all three ArrayLists.
      */
     public FreightTerminal(String terminalName) {
-        // TODO M2
+        this.terminalName = terminalName;
+        this.pendingPackages = new ArrayList<Package>();
+        this.activeContainers = new ArrayList<Container>();
+        this.dispatchedContainers = new ArrayList<Container>()
+
     }
 
     /**
      * TODO M4: Add a non-null package to pendingPackages.
      */
     public void receivePackage(Package p) {
-        // TODO M4
+        if (p != null){
+            pendingPackages.add(p);
+        }
     }
 
     /**
      * TODO M4: Return the size of pendingPackages.
      */
     public int getPendingCount() {
-        return 0; // TODO M4
+        return pendingPackages.size();
     }
 
     /**

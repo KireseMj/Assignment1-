@@ -25,7 +25,18 @@ public class Container {
      *   - Initialise the packages ArrayList
      */
     public Container(String destination, double maxWeightKg) {
-        // TODO M2
+        if (destination==null){
+            throw new IllegalArgumentException("Destination must not be null.");
+        }
+        if (maxWeightKg <=0 ){
+            throw new IllegalArgumentException("Weight must be above 0");
+        }
+        this.containerId = Sring.format("CNT-%03d", nextContainerId);
+        nextContainerId++;
+        this.destination = destination;
+        this.maxWeightKg = maxWeightKg;
+        this.packages = new ArrayList<Package>();
+
     }
 
     /**
@@ -33,11 +44,19 @@ public class Container {
      * TODO M3: Chain to the 2-param constructor using this(...)
      */
     public Container(String destination) {
-        // TODO M3: Write the this(...) call here
+        this(destination, 500.0);
     }
 
     // --- Getters ---
-    // TODO M4: Write getters for containerId, destination, maxWeightKg
+    public String getContainerId(){
+        return containerId;
+    }
+    public String getDestination(){
+        return destination;
+    }
+    public double getMaxWeightKg(){
+        return maxWeightKg;
+    }
 
     /**
      * TODO M8: Add a package to this container.

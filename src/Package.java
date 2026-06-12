@@ -26,6 +26,7 @@ public class Package {
     private String destination;
     private boolean isFragile;
     private double declaredValue;
+    private int orderNum;
 
     /**
      * Full constructor with all 9 parameters.
@@ -42,7 +43,33 @@ public class Package {
     public Package(String senderName, String receiverName, double weightKg,
                    int lengthCm, int widthCm, int heightCm,
                    String destination, boolean isFragile, double declaredValue) {
-        // TODO M2: Write validation and field assignments here
+        if (senderName == null || senderName.isEmpty()){
+            throw new IllegalArgumentException("Sender name must not be null or empty");
+        }
+        if (receiverName == null || receiverName.isEmpty()){
+            throw new IllegalArgumentException("Receiver name must not be null or empty");
+        }
+        if (weightKg <= 0){
+            throw new IllegalArgumentException("Weight must be greater than 0");
+        }
+        if (lengthCm <= 0 || widthCm <=0 || heightCm <=0){
+            throw new IllegalArgumentException("Dimensions must be greater than 0");
+        }
+        if (!VALID_DESTINATIONS.contains(destination)){
+            throw new IllegalArgumentException("Invalid destination entered.");
+        }
+
+        this.trackingId = String.format("PKG-%04d", nextTrackingNumber);
+        nextTrackingNumber++;
+        this.senderName = senderName;
+        this.receiverName = receiverName;
+         this.weightKg = weightKg;
+         this.lengthCm = lengthCm;
+        this.weightKg = weightKg;
+         this.heightCm= heightCm;
+         this.destination = destination;
+         this.isFragile = isFragile;
+         this.declaredValue = declaredValue;
     }
 
     /**
@@ -52,36 +79,64 @@ public class Package {
      */
     public Package(String senderName, String receiverName, double weightKg,
                    int lengthCm, int widthCm, int heightCm, String destination) {
-        // TODO M3: Write the this(...) call here
+        this(senderName, receiverName, weightKg, lengthCm, widthCm, heightCm,
+                destination, false, 0.0);
+
     }
 
     // --- Getters ---
+    0.
     // TODO M4: Write getters for ALL fields:
-    //   getTrackingId(), getSenderName(), getReceiverName(), getWeightKg(),
-    //   getLengthCm(), getWidthCm(), getHeightCm(), getDestination(),
-    //   isFragile(), getDeclaredValue()
-
+    public String getTrackingId() {
+        return trackingId; }
+    public String getSenderName(){
+        return senderName;
+    }
+    public String getReceiverName(){
+        return receiverName;
+    }
+    public double getWeightKg(){
+        return weightKg;
+    }
+    public int getLengthCm(){
+        return lengthCm;
+    }
+    public int getHeightCm(){
+        return heightCm;
+    }
+    public String getDestination(){
+        return destination;
+    }
+    public boolean isFragile(){
+        return isFragile;
+    }
+    public double getDeclaredValue(){
+        return declaredValue;
+    }
+    public int getOrderNum(){
+        return orderNum;
+    }
     // --- Computed methods ---
 
     /**
      * TODO M5: Return lengthCm * widthCm * heightCm
      */
     public int getVolumeCm3() {
-        return 0; // TODO M5
+        return lengthCm * widthCm * heightCm;// TODO M5
     }
 
     /**
      * TODO M5: Return getVolumeCm3() / 5000.0
      */
     public double getVolumetricWeightKg() {
-        return 0.0; // TODO M5
+        return getVolumeCm3() / 5000.0;// TODO M5
     }
 
     /**
      * TODO M5: Return Math.max(weightKg, getVolumetricWeightKg())
      */
     public double getBillableWeightKg() {
-        return 0.0; // TODO M5
+        return Math.max(weightKg, getVolumetricWeightKg()); // TODO M5
     }
 
     /**
@@ -93,6 +148,16 @@ public class Package {
      *   5. Round: Math.round(cost * 100) / 100.0
      */
     public double getShippingCost() {
+        double ratePerKg;
+        switch (destination){
+            case "Trinidad": ratePerKg= 8.00;
+            break;
+            case "Barbados": ratePerKg = 12.50;
+            break;
+            case "Jamaica": ratePerKg= 15.00;
+            break;
+            case "Antigua": ratePerKg= 18.00;
+        }
         return 0.0; // TODO M6
     }
 
